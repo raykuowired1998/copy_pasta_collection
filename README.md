@@ -1,2 +1,6 @@
-# copy_pasta_collection
-# copy_pasta_collection
+# 《古今複文集成》
+
+這個repo裡面有我蒐集的複製文，大部分是從facebook上面挖到的
+
+# 
+
