@@ -1,0 +1,72 @@
+import numpy as np
+class FruitFlyOptimizationAlgorithm
+def __init__(self, objective_function, dim, population_size=100, max_iter=100, lower_bound=-5, upper_bound=5)
+self.objective_function = objective_function # The objective function to minimize
+self.dim = dim # Dimension of the problem
+self.population_size = population_size # Number of fruit flies in the population
+self.max_iter = max_iter # Maximum number of iterations
+self.lower_bound = lower_bound # Lower bound of the search space
+self.upper_bound = upper_bound # Upper bound of the search space
+self.population = np.random.uniform(lower_bound, upper_bound, (population_size, dim)) # Initialize population
+self.best_position = None # Best position found
+self.best_fitness = float('inf') # Best fitness value found
+self.no_improvement_count = 0 # Counter for early stopping
+def evaluate_fitness(self, position)
+return self.objective_function(position) # Evaluate the fitness of a position
+def olfactory_search(self)
+new_population = np.zeros((self.population_size, self.dim))
+for i in range(self.population_size)
+# Perform olfactory search by generating new positions
+new_position = self.population[i] + np.random.uniform(-1, 1, self.dim)
+new_position = np.clip(new_position, self.lower_bound, self.upper_bound) # Ensure within bounds
+new_population[i] = new_position
+return new_population
+def visual_search(self, population)
+for i in range(self.population_size)
+# Perform visual search by moving towards the best position found so far
+if self.best_position is not None
+population[i] = self.best_position + np.random.uniform(-0.5, 0.5, self.dim) # Reduced search range for fine-tuning
+population[i] = np.clip(population[i], self.lower_bound, self.upper_bound) # Ensure within bounds
+return population
+def optimize(self)
+for iter in range(self.max_iter)
+# Olfactory search phase
+new_population = self.olfactory_search()
+# Evaluate the fitness of new positions
+improved = False
+for i in range(self.population_size)
+fitness = self.evaluate_fitness(new_population[i])
+if fitness  self.best_fitness
+self.best_fitness = fitness
+self.best_position = new_population[i]
+improved = True
+# Visual search phase
+new_population = self.visual_search(new_population)
+# Evaluate the fitness of new positions after visual search
+for i in range(self.population_size)
+fitness = self.evaluate_fitness(new_population[i])
+if fitness  self.best_fitness
+self.best_fitness = fitness
+self.best_position = new_population[i]
+improved = True
+# Update the population
+self.population = new_population
+print(fIteration {iter + 1}{self.max_iter}, Best Fitness {self.best_fitness})
+# Early stopping if no improvement
+if not improved
+self.no_improvement_count += 1
+if self.no_improvement_count = 10 # Stop if no improvement for 10 iterations
+print(No improvement for 10 iterations, stopping early.)
+break
+else
+self.no_improvement_count = 0
+return self.best_position, self.best_fitness
+# Define the constrained multivariate Rosenbrock function
+def rosenbrock_function(x)
+return sum(100.0  (x[1] - x[-1]2.0)2.0 + (1 - x[-1])2.0)
+# Instantiate and run the FOA
+dim = 2 # Dimension of the Rosenbrock function
+foa = FruitFlyOptimizationAlgorithm(objective_function=rosenbrock_function, dim=dim, max_iter=100)
+best_position, best_fitness = foa.optimize()
+print(Best Position, best_position)
+print(Best Fitness, best_fitness)
